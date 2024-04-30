@@ -6,7 +6,7 @@ RUN apt-get -y install apt-utils gcc \
 	fakeroot dbus base hexedit \
 	patch wamerican ucf manpages \
 	file make dialog curl \
-	less netcat-openbsd
+	less netcat-openbsd task-japanese locales-all
 RUN useradd -m user && echo "user:password" | chpasswd
 COPY --chown=user:user ./examples /home/user/examples
 WORKDIR /home/user/

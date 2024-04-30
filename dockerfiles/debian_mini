@@ -2,13 +2,15 @@ FROM --platform=i386 i386/debian:buster
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get clean && apt-get update && apt-get -y upgrade
 RUN apt-get -y install apt-utils gcc \
-	vim unzip \
+	vim unzip luajit lua50 \
 	fakeroot dbus base hexedit \
 	patch wamerican ucf manpages \
 	file make dialog curl \
 	less netcat-openbsd task-japanese locales-all
 RUN useradd -m user && echo "user:password" | chpasswd
 COPY --chown=user:user ./examples /home/user/examples
+RUN chmod -R +x  /home/user/examples/lua
+# We set WORKDIR, as this gets extracted by Webvm to be used as the cwd. This is optional.
 WORKDIR /home/user/
 # We set env, as this gets extracted by Webvm. This is optional.
 ENV HOME="/home/user" TERM="xterm" USER="user" SHELL="/bin/bash" EDITOR="vim" LANG="ja_JP.UTF-8" LC_ALL="C"

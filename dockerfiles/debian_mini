@@ -17,10 +17,12 @@ ENV HOME="/home/user" TERM="xterm" USER="user" SHELL="/bin/bash" EDITOR="vim" LA
 
 RUN apt-get update && apt-get install -y \
   locales task-japanese \
-RUN apt-get clean -y && rm -rf /var/lib/apt/lists/* \
-RUN sed -i -e 's/# \(ja_JP.UTF-8\)/\1/' /etc/locale.gen \
-RUN locale-gen ja_JP.UTF-8 \
-RUN update-locale LANG=ja_JP.UTF-8
+  && apt-get clean \
+  && locale-gen ja_JP.UTF-8 \
+  && rm -rf /var/lib/apt/lists/*
+RUN sed -i -E 's/# (ja_JP.UTF-8)/\1/' /etc/locale.gen \
+  && locale-gen ja_JP.UTF-8 \
+ENV LANG C.UTF-8
 
 RUN echo 'root:password' | chpasswd
 CMD [ "/bin/bash" ]

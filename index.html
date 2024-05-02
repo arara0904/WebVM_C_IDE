@@ -249,6 +249,7 @@ __      __   _  __   ____  __
 	term.onData(readData);
 
 	//Actual CheerpX and bash specific logic
+	var mainOS
 	function runBash()
 	{
 		// cmd, cwd, args and env are replaced by the Github actions workflow.
@@ -325,7 +326,7 @@ __      __   _  __   ____  __
 				h.textContent = "\u{1F7E0}";
 		}
 		// The device url and type are replaced by Github Actions.
-		var mainos = CheerpXApp.create({devices:[{type:DEVICE_TYPE,url:IMAGE_URL,name:"block1"}],mounts:[{type:"ext2",dev:"block1",path:"/"},{type:"cheerpOS",dev:"/app",path:"/app"},{type:"cheerpOS",dev:"/str",path:"/data"},{type:"devs",dev:"",path:"/dev"}], networkInterface: networkInterface, activityInterface: {cpu: cpuCallback, dev: devCallback}}).then(runTest, failCallback);
+		mainOS = CheerpXApp.create({devices:[{type:DEVICE_TYPE,url:IMAGE_URL,name:"block1"}],mounts:[{type:"ext2",dev:"block1",path:"/"},{type:"cheerpOS",dev:"/app",path:"/app"},{type:"cheerpOS",dev:"/str",path:"/data"},{type:"devs",dev:"",path:"/dev"}], networkInterface: networkInterface, activityInterface: {cpu: cpuCallback, dev: devCallback}}).then(runTest, failCallback);
 	}
 	function initialMessage()
 	{

@@ -290,7 +290,7 @@
                     <a href="javascript:downloadCodeFile();">DL</a>
                 </td>
                 <td>
-                    <a href="javascript:saveCodeFile();displayCodeFiles();"
+                    <a href="javascript:saveCodeFile();"
                         >保存</a
                     >
                 </td>
@@ -315,6 +315,7 @@
                 if (name) {
                     localStorage.setItem(name, code);
                 }
+                displayCodeFiles();
             };
             const displayCodeFiles = () => {
                 document.getElementById("files").innerHTML = "";
@@ -331,7 +332,7 @@
                             link.href =
                                 "javascript:loadCodeFile('" +
                                 name +
-                                "');menuButton();displayCodeFiles();";
+                                "');menuButton();";
                             link.style = "font-size:large;margin-left:1em;";
                             link.textContent = name;
                             elem.appendChild(link);
@@ -339,7 +340,7 @@
                             del.href =
                                 "javascript:deleteCodeFile('" +
                                 name +
-                                "');displayCodeFiles();";
+                                "');";
                             del.style = "font-size:small;";
                             del.textContent = "[削除]";
                             elem.appendChild(del);
@@ -352,9 +353,11 @@
                 saveCodeFile();
                 editor.setValue(localStorage.getItem(name));
                 document.getElementById("fileName").value = name;
+                displayCodeFiles();
             };
             const deleteCodeFile = (name) => {
                 localStorage.removeItem(name);
+                displayCodeFiles();
             };
             const runCodeFile = () => {
                 saveCodeFile();

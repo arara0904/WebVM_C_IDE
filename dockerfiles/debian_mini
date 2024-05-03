@@ -2,7 +2,8 @@ FROM --platform=i386 i386/debian:buster
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get clean && apt-get update && apt-get -y upgrade
 RUN apt-get -y install apt-utils gcc \
-	fakeroot dbus base \
+	vim unzip luajit lua50 \
+	fakeroot dbus base hexedit \
 	patch wamerican ucf manpages \
 	file make dialog curl \
 	less netcat-openbsd 

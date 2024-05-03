@@ -314,6 +314,8 @@
                 var code = editor.getValue();
                 if (name) {
                     localStorage.setItem(name, code);
+                }else{
+                    alert("エラー：ファイル名が設定されてないため、ファイルを保存できません。");
                 }
                 displayCodeFiles();
             };
@@ -411,7 +413,7 @@
                             });
                         },
                         function (e) {
-                            alert("ファイルの読み込みに失敗\n" + e);
+                            alert("エラー：ファイルの読み込みに失敗\n" + e);
                         },
                     );
                 }

@@ -36,18 +36,6 @@
                 margin-left: 0;
                 padding-left: 0;
             }
-
-            #menu {
-                position: fixed;
-                min-width: 16%;
-                height: 100%;
-                left: 0px;
-                top: 0px;
-                background: #000;
-                color: #fff;
-                z-index: 65533;
-                overflow-y: scroll;
-            }
             #menubutton {
                 position: fixed;
                 background: #000;
@@ -100,6 +88,17 @@
                     z-index: 65534;
                     font-size: x-large;
                 }
+                #menu {
+                    position: fixed;
+                    min-width: 100%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    background: #000;
+                    color: #fff;
+                    z-index: 65533;
+                    overflow-y: scroll;
+                }
             }
 
             @media screen and (max-width: 800px) {
@@ -126,6 +125,17 @@
                     color: #fff;
                     z-index: 65534;
                     font-size: medium;
+                }
+                #menu {
+                    position: fixed;
+                    min-width: 20%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    background: #000;
+                    color: #fff;
+                    z-index: 65533;
+                    overflow-y: scroll;
                 }
             }
         </style>

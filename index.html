@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ja" style="height: 100%; width: 100%">
     <head>
@@ -286,6 +287,9 @@
         <div id="menu" style="display: none" class="scrollbar">
             <ul id="files"></ul>
             <div id="bottommenu">
+                <a href="javascript:newCodeFile();"
+                    >新規ファイル</a
+                ><br>
                 <a href="javascript:document.getElementById('file').click();"
                     >ZIP読込</a
                 >
@@ -325,24 +329,36 @@
             const saveCodeFile = () => {
                 var name = document
                     .getElementById("fileName")
-                    .value.replace(/\n/g, "");
-                var code = editor.getValue();
-                if (name) {
-                    localStorage.setItem(name, code);
-                    popupMessage("ブラウザへの保存に成功");
-                } else {
-                    popupMessage(
+                    .value;
+                if(checkCodeFile(name) == true){
+                    var code = editor.getValue();
+                    if (name) {
+                        localStorage.setItem(name, code);
+                        popupMessage("ブラウザへの保存に成功");
+                    } else {
+                        popupMessage(
                         "エラー：ファイル名が設定されてないため、ファイルを保存できません",
-                    );
+                        );
+                    }
                 }
                 displayCodeFiles();
             };
 
+            const checkCodeFile = (name,code)=>{
+                if(name !== "" && name.match(/^.*\.(.*)/) && !name.match(/[^\x01-\x7E\uFF61-\uFF9F]+|\s|\\n/gim) ){
+                    return true;
+                }else{
+                    popupMessage(
+                        "このファイル名は使用できません"
+                    );
+                    return false;
+                }
+            }
+
             const displayCodeFiles = () => {
                 document.getElementById("files").innerHTML = "";
                 var nameInput = new Object();
-                for (name in localStorage) {
-                    if (localStorage.hasOwnProperty(name)) {
+                Object.keys(localStorage).sort().forEach((name)=>{
                         var elem = document.createElement("li");
                         if (document.getElementById("fileName").value == name) {
                             var link = document.createElement("p");
@@ -400,13 +416,7 @@
                             elem.appendChild(renameModeButton);
                         }
                         document.getElementById("files").appendChild(elem);
-                    }
-                }
-            };
-            const inputEnter = (e) => {
-                if (e.keyCode == 13) {
-                    renameMode('"+name+"');
-                }
+                });
             };
 
             const loadCodeFile = (name) => {
@@ -495,7 +505,8 @@
             const renameMode = (name) => {
                 var nameInput = document.getElementById("input_" + name);
                 if (
-                    nameInput.display == "inline" &&
+                    nameInput.style.display == "inline" &&
+                    checkCodeFile(nameInput.value) == true  &&
                     (!localStorage.getItem(nameInput.value) ||
                         nameInput.value == name)
                 ) {
@@ -506,10 +517,11 @@
                     popupMessage("ファイル名の変更に成功");
                 } else if (
                     nameInput.style.display == "inline" &&
+                    checkCodeFile(nameInput.value) == true &&
                     localStorage.getItem(nameInput.value)
                 ) {
                     popupMessage("既に使われている名前です");
-                } else {
+                } else if(nameInput.style.display == "none") {
                     displayCodeFiles();
                     var nameInput = document.getElementById("input_" + name);
                     nameInput.style.display = "inline";
@@ -525,6 +537,27 @@
                     mousePopup.style.display = "none";
                 }, 2400);
             };
+
+            const newCodeFile = ()=>{
+                var newNameNum = 0;
+                
+                while(localStorage.getItem("p00ex0"+newNameNum+".c")) newNameNum++;
+                console.log(newNameNum);
+                var newName = "p00ex0"+newNameNum+".c";
+                localStorage.setItem(newName,`/*** ps00 ***/
+/*** p00ex00.c ***/
+
+#include <stdio.h>
+
+int main(){
+    
+}
+
+/*** 結果 ***/
+/************/`);
+                displayCodeFiles();
+                renameMode(newName);
+            }
 
             document.addEventListener("keydown", (event) => {
                 if (event.key === "s" && event.ctrlKey) {

@@ -36,7 +36,7 @@
                 margin-left: 0;
                 padding-left: 0;
             }
-            p{
+            p {
                 display: inline-block;
             }
             #menubutton {
@@ -306,9 +306,7 @@
                     <a href="javascript:downloadCodeFile();">DL</a>
                 </td>
                 <td>
-                    <a href="javascript:saveCodeFile();"
-                        >保存</a
-                    >
+                    <a href="javascript:saveCodeFile();">保存</a>
                 </td>
                 <td>
                     <a href="javascript:runCodeFile();">実行</a>
@@ -323,6 +321,7 @@
                     document.getElementById("menu").style.display = "none";
                 }
             };
+
             const saveCodeFile = () => {
                 var name = document
                     .getElementById("fileName")
@@ -330,34 +329,47 @@
                 var code = editor.getValue();
                 if (name) {
                     localStorage.setItem(name, code);
-                }else{
-                    alert("エラー：ファイル名が設定されてないため、ファイルを保存できません。");
+                    popupMessage("ブラウザへの保存に成功");
+                } else {
+                    popupMessage(
+                        "エラー：ファイル名が設定されてないため、ファイルを保存できません",
+                    );
                 }
                 displayCodeFiles();
             };
+
             const displayCodeFiles = () => {
                 document.getElementById("files").innerHTML = "";
+                var nameInput = new Object();
                 for (name in localStorage) {
                     if (localStorage.hasOwnProperty(name)) {
                         var elem = document.createElement("li");
                         if (document.getElementById("fileName").value == name) {
                             var link = document.createElement("p");
-                            link.textContent =  name;
-                            link.style = "font-size:large;margin:0;margin-left:1em;";
+                            link.textContent = name;
+                            link.style =
+                                "font-size:large;margin:0;margin-left:1em;";
                             var del = document.createElement("a");
                             del.href =
-                                "javascript:deleteCodeFile('" +
-                                name +
-                                "');";
+                                "javascript:deleteCodeFile('" + name + "');";
                             del.style = "font-size:small;";
                             del.textContent = "[削除]";
                             elem.appendChild(link);
                             elem.appendChild(del);
                         } else {
-                            var nameInput = document.createElement("input");
-                            nameInput.value = name;
-                            nameInput.id = "input_"+name;
-                            nameInput.style="background:#000;color:#fff;font-size:large;margin-left:1em;width:160px;display:none;";
+                            nameInput[name] = document.createElement("input");
+                            nameInput[name].value = name;
+                            nameInput[name].id = "input_" + name;
+                            nameInput[name].style =
+                                "background:#000;color:#fff;font-size:large;margin-left:1em;width:160px;display:none;";
+                            nameInput[name].onkeypress = (e) => {
+                                console.log(e);
+                                if (e.keyCode == 13) {
+                                    renameMode(
+                                        e.target.id.match(/^input_(.+)/)[1],
+                                    );
+                                }
+                            };
                             var link = document.createElement("a");
                             link.href =
                                 "javascript:loadCodeFile('" +
@@ -365,23 +377,23 @@
                                 "');menuButton();";
                             link.style = "font-size:large;margin-left:1em;";
                             link.textContent = name;
-                            link.id="file_"+name;
+                            link.id = "file_" + name;
                             var del = document.createElement("a");
                             del.href =
-                                "javascript:deleteCodeFile('" +
-                                name +
-                                "');";
+                                "javascript:deleteCodeFile('" + name + "');";
                             del.style = "font-size:small;";
                             del.textContent = "[削除]";
                             var renameModeButton = document.createElement("a");
-                            renameModeButton.href="javascript:renameMode('"+name+"');";
+                            renameModeButton.href =
+                                "javascript:renameMode('" + name + "');";
                             renameModeButton.textContent = "[リネーム]";
                             renameModeButton.style = "font-size:small;";
                             var dlButton = document.createElement("a");
-                            dlButton.href = "javascript:downloadCodeFile('"+name+"')";
+                            dlButton.href =
+                                "javascript:downloadCodeFile('" + name + "')";
                             dlButton.textContent = "[DL]";
                             dlButton.style = "font-size:small;";
-                            elem.appendChild(nameInput);
+                            elem.appendChild(nameInput[name]);
                             elem.appendChild(link);
                             elem.appendChild(dlButton);
                             elem.appendChild(del);
@@ -391,14 +403,22 @@
                     }
                 }
             };
+            const inputEnter = (e) => {
+                if (e.keyCode == 13) {
+                    renameMode('"+name+"');
+                }
+            };
+
             const loadCodeFile = (name) => {
                 editor.setValue(localStorage.getItem(name));
                 document.getElementById("fileName").value = name;
                 displayCodeFiles();
+                popupMessage("ファイルを開きました");
             };
             const deleteCodeFile = (name) => {
                 localStorage.removeItem(name);
                 displayCodeFiles();
+                popupMessage("ファイルの削除に成功");
             };
             const runCodeFile = () => {
                 saveCodeFile();
@@ -409,20 +429,23 @@
                     for (name in localStorage) {
                         if (localStorage.hasOwnProperty(name)) {
                             cheerpOSAddStringFile(
-                                "/str/"+name,
+                                "/str/" + name,
                                 (str = new TextEncoder("utf-8").encode(
-                                localStorage.getItem(name)
-                                ))
+                                    localStorage.getItem(name),
+                                )),
                             );
                         }
                     }
-                    readData("gcc -o run /data/"+fileName+" && ./run && echo \n");
+                    readData(
+                        "gcc -o run /data/" + fileName + " && ./run && echo \n",
+                    );
+                    popupMessage("初回実行時は時間がかかります...");
                 });
             };
             const downloadCodeFile = (name) => {
-                if(!name){
+                if (!name) {
                     saveCodeFile();
-                     name = document
+                    name = document
                         .getElementById("fileName")
                         .value.replace(/\n/g, "");
                 }
@@ -430,6 +453,7 @@
                     type: "text/x-c",
                 });
                 saveAs(blob, name);
+                popupMessage("ファイルのダウンロードに成功");
             };
             const downloadCodeFiles = () => {
                 saveCodeFile();
@@ -442,8 +466,8 @@
                 zip.generateAsync({ type: "blob" }).then(function (content) {
                     saveAs(content, "codes.zip");
                 });
+                popupMessage("ZIPファイルのダウンロードに成功");
             };
-            displayCodeFiles();
 
             const loadCodeFiles = (evt) => {
                 var files = evt.files;
@@ -458,27 +482,49 @@
                             });
                         },
                         function (e) {
-                            alert("エラー：ファイルの読み込みに失敗\n" + e);
+                            popupMessage("エラー：ファイルの読み込みに失敗");
                         },
                     );
                 }
                 setTimeout(() => {
                     displayCodeFiles();
+                    popupMessage("ZIPファイルの読み込みに成功");
                 }, 500);
             };
-            const renameMode=(name)=>{
-                if(document.getElementById("input_"+name).style.display=="inline"&&  (!localStorage.getItem(document.getElementById("input_"+name).value) || document.getElementById("input_"+name).value==name)){
-                    var nameInput = document.getElementById("input_"+name);
+
+            const renameMode = (name) => {
+                var nameInput = document.getElementById("input_" + name);
+                if (
+                    nameInput.display == "inline" &&
+                    (!localStorage.getItem(nameInput.value) ||
+                        nameInput.value == name)
+                ) {
                     var cont = localStorage.getItem(name);
                     localStorage.removeItem(name);
                     localStorage.setItem(nameInput.value, cont);
                     displayCodeFiles();
-                }else{
-                    var nameInput = document.getElementById("input_"+name);
-                    nameInput.style.display="inline";
-                    document.getElementById("file_"+name).style.display="none";
+                    popupMessage("ファイル名の変更に成功");
+                } else if (
+                    nameInput.style.display == "inline" &&
+                    localStorage.getItem(nameInput.value)
+                ) {
+                    popupMessage("既に使われている名前です");
+                } else {
+                    displayCodeFiles();
+                    var nameInput = document.getElementById("input_" + name);
+                    nameInput.style.display = "inline";
+                    document.getElementById("file_" + name).style.display =
+                        "none";
                 }
-            }
+            };
+
+            const popupMessage = (message) => {
+                mousePopup.textContent = message;
+                mousePopup.style.display = "inline";
+                setTimeout(() => {
+                    mousePopup.style.display = "none";
+                }, 2400);
+            };
 
             document.addEventListener("keydown", (event) => {
                 if (event.key === "s" && event.ctrlKey) {
@@ -487,7 +533,17 @@
                 }
             });
 
-            
+            var mousePopup = document.createElement("div");
+            mousePopup.style =
+                "position:fixed;background:#000;color:#fff;border:solid 1px #ccc;margin:0;padding:0.5rem;z-index:65536;display:none;";
+            mousePopup.id = "mousePopup";
+            document.body.appendChild(mousePopup);
+            document.addEventListener("mousemove", (e) => {
+                mousePopup.style.top = e.clientY + "px";
+                mousePopup.style.left = e.clientX + 24 + "px";
+            });
+
+            displayCodeFiles();
 
             //Utility namespace to group all functionality related to printing (both error and non error) messages
             const color = "\x1b[1;35m";

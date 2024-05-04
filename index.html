@@ -36,6 +36,9 @@
                 margin-left: 0;
                 padding-left: 0;
             }
+            p{
+                display: inline-block;
+            }
             #menubutton {
                 position: fixed;
                 background: #000;
@@ -44,19 +47,6 @@
                 bottom: 0;
                 left: 0;
                 z-index: 65535;
-            }
-            #fileName {
-                background: #000;
-                color: #fff;
-                font-size: x-large;
-                z-index: 65535;
-                width: 200px;
-            }
-            #bottommenu {
-                position: absolute;
-                font-size: x-large;
-                bottom: 0;
-                right: 0;
             }
 
             input#fileName {
@@ -99,6 +89,19 @@
                     z-index: 65533;
                     overflow-y: scroll;
                 }
+                #fileName {
+                    background: #000;
+                    color: #fff;
+                    font-size: x-large;
+                    z-index: 65535;
+                    width: 200px;
+                }
+                #bottommenu {
+                    position: absolute;
+                    font-size: x-large;
+                    bottom: 0;
+                    right: 0;
+                }
             }
 
             @media screen and (max-width: 800px) {
@@ -136,6 +139,19 @@
                     color: #fff;
                     z-index: 65533;
                     overflow-y: scroll;
+                }
+                #fileName {
+                    background: #000;
+                    color: #fff;
+                    font-size: x-large;
+                    z-index: 65535;
+                    width: 144px;
+                }
+                #bottommenu {
+                    position: absolute;
+                    font-size: x-large;
+                    bottom: 40px;
+                    right: 0;
                 }
             }
         </style>
@@ -226,7 +242,7 @@
                                 "
                             >
                                 <span id="networkStatus"
-                                    >【Connect via Tailscale】
+                                    >[Connect via Tailscale]
                                 </span>
                                 <span
                                     style="
@@ -326,18 +342,8 @@
                         var elem = document.createElement("li");
                         if (document.getElementById("fileName").value == name) {
                             var link = document.createElement("p");
-                            link.textContent = ">" + name;
-                            link.style = "margin:0.5em;";
-                            elem.appendChild(link);
-                        } else {
-                            var link = document.createElement("a");
-                            link.href =
-                                "javascript:loadCodeFile('" +
-                                name +
-                                "');menuButton();";
-                            link.style = "font-size:large;margin-left:1em;";
-                            link.textContent = name;
-                            elem.appendChild(link);
+                            link.textContent =  name;
+                            link.style = "font-size:large;margin:0;margin-left:1em;";
                             var del = document.createElement("a");
                             del.href =
                                 "javascript:deleteCodeFile('" +
@@ -345,14 +351,47 @@
                                 "');";
                             del.style = "font-size:small;";
                             del.textContent = "[削除]";
+                            elem.appendChild(link);
                             elem.appendChild(del);
+                        } else {
+                            var nameInput = document.createElement("input");
+                            nameInput.value = name;
+                            nameInput.id = "input_"+name;
+                            nameInput.style="background:#000;color:#fff;font-size:large;margin-left:1em;width:160px;display:none;";
+                            var link = document.createElement("a");
+                            link.href =
+                                "javascript:loadCodeFile('" +
+                                name +
+                                "');menuButton();";
+                            link.style = "font-size:large;margin-left:1em;";
+                            link.textContent = name;
+                            link.id="file_"+name;
+                            var del = document.createElement("a");
+                            del.href =
+                                "javascript:deleteCodeFile('" +
+                                name +
+                                "');";
+                            del.style = "font-size:small;";
+                            del.textContent = "[削除]";
+                            var renameModeButton = document.createElement("a");
+                            renameModeButton.href="javascript:renameMode('"+name+"');";
+                            renameModeButton.textContent = "[リネーム]";
+                            renameModeButton.style = "font-size:small;";
+                            var dlButton = document.createElement("a");
+                            dlButton.href = "javascript:downloadCodeFile('"+name+"')";
+                            dlButton.textContent = "[DL]";
+                            dlButton.style = "font-size:small;";
+                            elem.appendChild(nameInput);
+                            elem.appendChild(link);
+                            elem.appendChild(dlButton);
+                            elem.appendChild(del);
+                            elem.appendChild(renameModeButton);
                         }
                         document.getElementById("files").appendChild(elem);
                     }
                 }
             };
             const loadCodeFile = (name) => {
-                saveCodeFile();
                 editor.setValue(localStorage.getItem(name));
                 document.getElementById("fileName").value = name;
                 displayCodeFiles();
@@ -363,24 +402,30 @@
             };
             const runCodeFile = () => {
                 saveCodeFile();
-                name = document
+                fileName = document
                     .getElementById("fileName")
                     .value.replace(/\n/g, "");
                 runBash(() => {
-                    cheerpOSAddStringFile(
-                        "/str/run.c",
-                        (str = new TextEncoder("utf-8").encode(
-                            localStorage.getItem(name),
-                        )),
-                    );
-                    readData("gcc -o run /data/run.c && ./run && echo \n");
+                    for (name in localStorage) {
+                        if (localStorage.hasOwnProperty(name)) {
+                            cheerpOSAddStringFile(
+                                "/str/"+name,
+                                (str = new TextEncoder("utf-8").encode(
+                                localStorage.getItem(name)
+                                ))
+                            );
+                        }
+                    }
+                    readData("gcc -o run /data/"+fileName+" && ./run && echo \n");
                 });
             };
-            const downloadCodeFile = () => {
-                saveCodeFile();
-                var name = document
-                    .getElementById("fileName")
-                    .value.replace(/\n/g, "");
+            const downloadCodeFile = (name) => {
+                if(!name){
+                    saveCodeFile();
+                     name = document
+                        .getElementById("fileName")
+                        .value.replace(/\n/g, "");
+                }
                 const blob = new Blob([localStorage.getItem(name)], {
                     type: "text/x-c",
                 });
@@ -421,6 +466,19 @@
                     displayCodeFiles();
                 }, 500);
             };
+            const renameMode=(name)=>{
+                if(document.getElementById("input_"+name).style.display=="inline"&&  (!localStorage.getItem(document.getElementById("input_"+name).value) || document.getElementById("input_"+name).value==name)){
+                    var nameInput = document.getElementById("input_"+name);
+                    var cont = localStorage.getItem(name);
+                    localStorage.removeItem(name);
+                    localStorage.setItem(nameInput.value, cont);
+                    displayCodeFiles();
+                }else{
+                    var nameInput = document.getElementById("input_"+name);
+                    nameInput.style.display="inline";
+                    document.getElementById("file_"+name).style.display="none";
+                }
+            }
 
             document.addEventListener("keydown", (event) => {
                 if (event.key === "s" && event.ctrlKey) {
@@ -428,6 +486,8 @@
                     saveCodeFile();
                 }
             });
+
+            
 
             //Utility namespace to group all functionality related to printing (both error and non error) messages
             const color = "\x1b[1;35m";
@@ -657,8 +717,8 @@
                 CheerpXApp.create({
                     devices: [
                         {
-                            type: DEVICE_TYPE,
-                            url: IMAGE_URL,
+                            type: "split",
+                            url: "debian_mini_20240503_8941538081.ext2",
                             name: "block1",
                         },
                     ],

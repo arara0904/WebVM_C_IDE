@@ -32,32 +32,32 @@
             }
             ul {
                 list-style: none;
-                margin: 1rem;
-                margin-left: 0;
+                padding: 1rem;
                 padding-left: 0;
+            }
+            li{
+                margin-bottom:4px;
             }
             p {
                 display: inline-block;
             }
+            td{
+                border:0;
+                margin:0;
+                padding:0;
+            }
             #menubutton {
-                position: fixed;
                 background: #000;
                 color: #fff;
                 font-size: x-large;
-                bottom: 0;
-                left: 0;
                 z-index: 65535;
-            }
-
-            input#fileName {
-                width: 16vwh -40px !important;
             }
 
             @media screen and (min-width: 800px) {
                 .viewdisplay1 {
                     position: fixed;
                     width: 50%;
-                    height: 100%;
+                    height:calc(100% - 46px) ;
                     left: 0px;
                     top: 0px;
                 }
@@ -70,9 +70,8 @@
                 }
                 #menu2 {
                     position: fixed;
-                    min-width: 16%-40px;
-                    right: 50%;
-                    bottom: 0;
+                    left:0;
+                    bottom:0;
                     background: #000;
                     color: #fff;
                     z-index: 65534;
@@ -81,26 +80,34 @@
                 #menu {
                     position: fixed;
                     min-width: 20%;
-                    height: 100%;
+                    max-width:100%;
+                    height: calc(100% - 46px);
                     left: 0;
                     top: 0;
                     background: #000;
                     color: #fff;
                     z-index: 65533;
-                    overflow-y: scroll;
                 }
                 #fileName {
                     background: #000;
                     color: #fff;
                     font-size: x-large;
                     z-index: 65535;
-                    width: 200px;
+                    margin-left:2px;
+                    width:calc(50vw - 256px);
                 }
                 #bottommenu {
                     position: absolute;
                     font-size: x-large;
                     bottom: 0;
-                    right: 0;
+                    left: 0;
+                }
+                #console{
+                    height:calc(100vh - 64px)!important;
+                }
+                #files{
+                    height:calc(100vh - 192px);
+                    overflow-y:scroll;
                 }
             }
 
@@ -108,22 +115,21 @@
                 .viewdisplay1 {
                     position: fixed;
                     width: 100vw;
-                    height: 50%;
+                    height: calc(50% - 46px);
                     left: 0px;
                     top: 0px;
                 }
                 .viewdisplay2 {
                     position: fixed;
-                    width: 100;
+                    width: 100%;
                     height: 50%;
                     left: 0px;
                     bottom: 0px;
                 }
                 #menu2 {
                     position: fixed;
-                    min-width: 16%-40px;
-                    right: 0;
-                    bottom: 0;
+                    left: 0;
+                    bottom: 50%;
                     background: #000;
                     color: #fff;
                     z-index: 65534;
@@ -131,27 +137,35 @@
                 }
                 #menu {
                     position: fixed;
-                    min-width: 100%;
-                    height: 100%;
+                    width: 100%;
+                    height: calc(50% - 46px);
                     left: 0;
                     top: 0;
                     background: #000;
                     color: #fff;
                     z-index: 65533;
-                    overflow-y: scroll;
                 }
                 #fileName {
                     background: #000;
                     color: #fff;
                     font-size: x-large;
                     z-index: 65535;
-                    width: 144px;
+                    margin-left:2px;
+                    width:calc(100vw - 200px);
                 }
                 #bottommenu {
                     position: absolute;
                     font-size: x-large;
-                    bottom: 40px;
-                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+                #console{
+                    height:calc(50vh - 48px);
+                    
+                }
+                #files{
+                    height:calc(50vh - 192px);
+                    overflow-y:scroll;
                 }
             }
         </style>
@@ -167,45 +181,25 @@
             color: white;
         "
     >
-        <div class="viewdisplay1" id="editor"></div>
+        <div class="viewdisplay1 scrollbar" id="editor"></div>
 
-        <div class="viewdisplay2">
+        <div class="viewdisplay2" >
             <div
                 style="
-                    padding-top: 0.7em;
-                    padding-bottom: 0.7em;
-                    font-size: 0.3em;
-                    font-weight: 200;
-                    vertical-align: center;
-                    height: 40px;
+                margin-top:8px;
+                margin-left:8px;
+                    font-size:large;
+                    height: 48px;
+                    align-items:center;
                 "
             >
-                <div
-                    style="
-                        padding-top: 0.7em;
-                        font-size: 0.3em;
-                        font-weight: 200;
-                        vertical-align: center;
-                        height: 50px;
-                    "
-                >
-                    <div
-                        style="
-                            margin-right: 10px;
-                            margin-left: 20px;
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                        "
-                    >
-                        <div
+                                        <div
                             style="
                                 color: white;
                                 font-family: montserrat;
                                 font-weight: 400;
-                                font-size: large;
                                 height: 100%;
-                                display: flex;
+                                display: inline-block;
                                 align-items: center;
                             "
                         >
@@ -219,9 +213,8 @@
                                 color: white;
                                 font-family: montserrat;
                                 font-weight: 400;
-                                font-size: large;
                                 height: 100%;
-                                display: flex;
+                                display: inline-block;
                                 align-items: center;
                             "
                         >
@@ -237,8 +230,8 @@
                                     color: white;
                                     font-family: montserrat;
                                     font-weight: 400;
-                                    font-size: large;
                                     height: 100%;
+                                display: inline-block;
                                 "
                             >
                                 <span id="networkStatus"
@@ -255,23 +248,11 @@
                                 　
                             </div>
                         </a>
-                    </div>
-                </div>
             </div>
 
-            <main
-                style="
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    margin: 5px;
-                    height: 100%;
-                "
-            >
                 <div
                     style="
-                        flex-grow: 1;
-                        height: 100%;
+                        width:100%;
                         display: inline-block;
                         margin: 0;
                         padding: 0;
@@ -279,23 +260,31 @@
                     class="scrollbar"
                     id="console"
                 ></div>
-            </main>
         </div>
 
-        <button id="menubutton" onClick="menuButton();">︙</button>
-        <div id="menu" style="display: none" class="scrollbar">
+        <div id="menu" style="display: none;" class="scrollbar">
             <ul id="files"></ul>
             <div id="bottommenu">
                 <a href="javascript:newCodeFile();"
-                    >新規ファイル</a
-                ><br>
+                    >新規</a
+                >
+                <a href="javascript:document.getElementById('file2').click();"
+                    >読込</a
+                >
+                <input
+                    type="file"
+                    id="file2"
+                    style="display: none;"
+                    onChange="loadFile(this);"
+                />
+                <br>
                 <a href="javascript:document.getElementById('file').click();"
                     >ZIP読込</a
                 >
                 <input
                     type="file"
                     id="file"
-                    style="display: none"
+                    style="display: none;"
                     accept=".zip"
                     onChange="loadCodeFiles(this);"
                 />
@@ -304,6 +293,7 @@
         </div>
         <div id="menu2">
             <table>
+                <td><button id="menubutton" onClick="menuButton();">︙</button></td>
                 <td><input type="text" id="fileName" /></td>
                 <td>
                     <a href="javascript:downloadCodeFile();">DL</a>
@@ -343,8 +333,8 @@
                 displayCodeFiles();
             };
 
-            const checkCodeFile = (name,code)=>{
-                if(name !== "" && name.match(/^.*\.(.*)/) && !name.match(/[^\x01-\x7E\uFF61-\uFF9F]+|\s|\\n/gim) ){
+            const checkCodeFile = (name)=>{
+                if(name !== "" && name.match(/^.*\.(.*)/) && !name.match(/\\n/gim) ){
                     return true;
                 }else{
                     popupMessage(
@@ -361,7 +351,7 @@
                         var elem = document.createElement("li");
                         if (document.getElementById("fileName").value == name) {
                             var link = document.createElement("p");
-                            link.textContent = name;
+                            link.textContent =">"+ name;
                             link.style =
                                 "font-size:large;margin:0;margin-left:1em;";
                             var del = document.createElement("a");
@@ -378,7 +368,6 @@
                             nameInput[name].style =
                                 "background:#000;color:#fff;font-size:large;margin-left:1em;width:160px;display:none;";
                             nameInput[name].onkeypress = (e) => {
-                                console.log(e);
                                 if (e.keyCode == 13) {
                                     renameMode(
                                         e.target.id.match(/^input_(.+)/)[1],
@@ -445,9 +434,11 @@
                             );
                         }
                     }
-                    readData(
-                        "gcc -o run /data/" + fileName + " && ./run && echo \n",
-                    );
+                    setTimeout(() => {
+                        readData(
+                            "gcc -o run /data/" + fileName + " && ./run && echo \n",
+                        );
+                    }, 1000);
                     popupMessage("初回実行時は時間がかかります...");
                 });
             };
@@ -541,7 +532,6 @@
                 var newNameNum = 0;
                 
                 while(localStorage.getItem("p00ex0"+newNameNum+".c")) newNameNum++;
-                console.log(newNameNum);
                 var newName = "p00ex0"+newNameNum+".c";
                 localStorage.setItem(newName,`/*** ps00 ***/
 /*** p00ex00.c ***/
@@ -555,6 +545,7 @@ int main(){
 /*** 結果 ***/
 /************/`);
                 displayCodeFiles();
+                popupMessage("新規ファイルの作成に成功");
                 renameMode(newName);
             }
 
@@ -594,10 +585,24 @@ int main(){
                     } 
                 }
             });
+            const loadFile = (e)=>{
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    if(checkCodeFile(e.files[0].name)==true){
+                        localStorage.setItem(e.files[0].name,event.target.result);
+                        displayCodeFiles();
+                    }
+                };
+                reader.readAsText(e.files[0]);
+            }
+
+
+            
 
             displayCodeFiles();
 
             //Utility namespace to group all functionality related to printing (both error and non error) messages
+            var shurtdown = 0;
             const color = "\x1b[1;35m";
             const bold = "\x1b[1;37m";
             const underline = "\x1b[94;4m";
@@ -705,19 +710,31 @@ int main(){
             );
             term.focus();
             var cxReadFunc = null;
+            var bufferCache = [];
             function writeData(buf) {
-                term.write(new TextDecoder("utf-8").decode(buf));
+                if(new TextDecoder("utf-8").decode(buf)=="�"){
+                    bufferCache.push(Array.from(buf)[0])
+                    if(new TextDecoder("utf-8").decode(new Uint8Array(bufferCache))!=="�"){
+                        term.write(new TextDecoder("utf-8").decode(new Uint8Array(bufferCache)));
+                        bufferCache = [];
+                    }
+                }else{
+                    term.write(new TextDecoder("utf-8").decode(buf));
+                }
             }
+            
             function readData(str) {
+                str = new TextEncoder("utf-8").encode(str)
                 if (cxReadFunc == null) return;
                 for (var i = 0; i < str.length; i++)
-                    cxReadFunc(str.charCodeAt(i));
+                    cxReadFunc(str[i]);
             }
             term.onData(readData);
 
             //Actual CheerpX and bash specific logic
             async function runBash(userCB) {
                 term.reset();
+                shurtdown = 1;
                 // cmd, cwd, args and env are replaced by the Github actions workflow.
                 var cmd = ["/bin/bash"];
                 var args = [];
@@ -792,14 +809,14 @@ int main(){
                     setTimeout(() => {
                         userCB();
                     }, 1000);
-
+                    shurtdown = 0;
                     var opts = {
                         env: structure.env,
                         cwd: structure.cwd,
                         uid: 1000,
                         gid: 1000,
                     };
-                    while (true) {
+                    while (shurtdown==0) {
                         await cxLogAndRun(
                             cx,
                             structure.cmd,
@@ -864,6 +881,7 @@ int main(){
                 enableLiveAutocompletion: true,
                 fontSize: "medium",
                 showInvisibles: true,
+                scrollPastEnd: 1
             });
             editor.setValue(`/*** ps00 ***/
 /*** p00ex00.c ***/

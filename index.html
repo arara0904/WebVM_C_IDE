@@ -414,6 +414,7 @@
                 popupMessage("ファイルを開きました");
             };
             const deleteCodeFile = (name) => {
+                saveCodeFile();
                 localStorage.removeItem(name);
                 displayCodeFiles();
                 popupMessage("ファイルの削除に成功");
@@ -443,6 +444,7 @@
                 });
             };
             const downloadCodeFile = (name) => {
+                saveCodeFile();
                 if (!name) {
                     saveCodeFile();
                     name = document
@@ -493,6 +495,7 @@
             };
 
             const renameMode = (name) => {
+                saveCodeFile();
                 var nameInput = document.getElementById("input_" + name);
                 if (
                     nameInput.style.display == "inline" &&

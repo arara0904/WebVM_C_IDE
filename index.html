@@ -444,14 +444,14 @@
                 });
             };
             const downloadCodeFile = (name) => {
-                saveCodeFile();
                 if (!name) {
                     saveCodeFile();
                     name = document
                         .getElementById("fileName")
                         .value.replace(/\n/g, "");
                 }
-                const blob = new Blob([localStorage.getItem(name)], {
+                var bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
+                const blob = new Blob([bom,localStorage.getItem(name)], {
                     type: "text/x-c",
                 });
                 saveAs(blob, name);
